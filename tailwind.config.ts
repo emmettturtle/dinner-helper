@@ -13,9 +13,12 @@ export default withUt({
         background: "var(--background)",
         foreground: "var(--foreground)",
         dhYellow: "#ECF842",
-        dhPurple: "#9A2345",
+        dhPurple: "#A80A44",
         dhOrange: "#EB5E39",
         dhWhite: "#F7F3DA"
+      },
+      padding: {
+        '1/5': '20vw',
       },
     },
   },

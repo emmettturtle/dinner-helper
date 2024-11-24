@@ -5,6 +5,7 @@ import Link from 'next/link'
 import Upload from './ui/upload-button'
 import { useState } from 'react'
 import UploadAndResponse from './ui/upload-response'
+import { lilitaOne, robotoSlab } from '@/app/ui/fonts';
 
 
 function classNames(...classes: (string | false | null | undefined)[]): string {
@@ -16,26 +17,27 @@ export default function Home() {
 
   return (
     <div className="min-h-full h-screen bg-cover bg-center" style={{ backgroundImage: `url('../dinner-helper-backround.jpg')` }}>
-      <Disclosure as="nav" className="border-b border-gray-200 bg-dhYellow">
+      <Disclosure as="nav" className=" border-2 border-dhOrange bg-dhYellow">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex justify-center items-center ">
-            <h1 className='text-4xl p-3 text-black'>Dinner Helper</h1>
+            <h1 className={`${lilitaOne.className} antialiased text-5xl p-2 text-dhOrange`}>DINNER HELPER</h1>
           </div>
         </div>
       </Disclosure>
 
-      <div className="py-10">
+      <div className="pt-10 mx-[15%] mt-10 bg-dhWhite rounded-lg font-dhPurple border-4 border-dhPurple">
         <header>
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <h1 className="text-3xl tracking-tight text-gray-900">Not sure what to make for dinner?</h1>
-            <p className='text-gray-900'>Upload a picture of your fridge or pantry and we'll tell you what you got and what to make.</p>
+          <div className={`${robotoSlab.className} mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-dhPurple`}>
+            <h1 className="text-3xl tracking-tight">Not sure what to make for dinner?</h1>
+            <p className='mb-4'>Upload a picture of your fridge or pantry and we'll tell you what you got and what to make.</p>
           </div>
         </header>
         <main>
-          <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 border">
+          <div className={
+            `${robotoSlab.className} mx-auto max-w-7xl px-20 sm:px-6 lg:px-8 text-dhPurple bg-dhWhite rounded-lg`
+          }>
             {/* upload button */}
             <div className='flex justify-evenly w-full'>
-              {/* <Upload setImgURL={setImgURL}></Upload> */}
               <UploadAndResponse></UploadAndResponse>
             </div>
 

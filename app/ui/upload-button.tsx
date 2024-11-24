@@ -19,6 +19,7 @@ export default function Upload({ setImgURL }: { setImgURL: (url: string) => void
                 // Do something with the error.
                 alert(`ERROR! ${error.message}`);
             }}
+            className="p-4 ut-button:bg-dhPurple ut-button:ut-readying:bg-dhOrange"
         />
     );
 }

@@ -3,7 +3,8 @@
 import Upload from "./upload-button";
 import { useState, useEffect } from "react";
 import { fetchImgAnalysis } from "../lib/api";
-
+import LoadingSpinner from "./loading-spinner";
+ 
 
 export default function UploadAndResponse() {
     const [imgURL, setImgURL] = useState<string>('');
@@ -32,23 +33,31 @@ export default function UploadAndResponse() {
     }, [imgURL]); // Dependency array to watch for changes to imgURL
 
     return (
-        <div>
-            
-            {!loading && (
-                <div className="text-black">
-                    {resObj.length > 0 ? (
-                        <ul>
-                            {resObj.map((item, index) => (
-                                <li key={index}>
-                                    {item.name}: {item.quantity}
-                                </li>
-                            ))}
-                        </ul>
-                    ) : (
-                        <p>No items detected</p>
-                    )}
+        <div >
+            <div className="border-2 border-dhOrange">
+                <div className="bg-dhOrange text-dhYellow flex justify-center text-xl font-bold p-2">
+                    <p>Food items we found</p>
+
                 </div>
-            )}
+                {loading && <LoadingSpinner/>}
+                {!loading && (
+                    <div className="text-dhOrange text-xl p-3">
+
+                        {resObj.length > 0 ? (
+                            <ul>
+                                {resObj.map((item, index) => (
+                                    <li key={index}>
+                                        {item.name}: {item.quantity}
+                                    </li>
+                                ))}
+                            </ul>
+                        ) : (
+                            <p>No items detected</p>
+                        )}
+                    </div>
+                )}
+            </div>
+
 
             <Upload setImgURL={setImgURL}></Upload>
         </div>
