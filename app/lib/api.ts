@@ -101,15 +101,6 @@ export async function fetchImgAnalysis(imgUrl: string) {
                 }
                 ]
             }
-            // {
-            //     "role": "assistant",
-            //     "content": [
-            //     {
-            //         "type": "text",
-            //         "text": "```json\n{\n  \"items\": [\n    { \"name\": \"milk\", \"quantity\": 1 },\n    { \"name\": \"orange juice\", \"quantity\": 1 },\n    { \"name\": \"vegetables\", \"quantity\": 1 },\n    { \"name\": \"grapes\", \"quantity\": 1 },\n    { \"name\": \"oranges\", \"quantity\": 3 },\n    { \"name\": \"apples\", \"quantity\": 3 },\n    { \"name\": \"condiments\", \"quantity\": 5 },\n    { \"name\": \"bottled drinks\", \"quantity\": 4 }\n  ]\n}\n```"
-            //     }
-            //     ]
-            // }
         ],
         response_format: {
             "type": "text"
@@ -139,9 +130,4 @@ export async function fetchImgAnalysis(imgUrl: string) {
     } else {
         throw new Error("No content in response");
     }
-    // console.log(JSON.parse(response.choices[0].message.content))
-    // const jsonResponse = response.choices[0].message.content
-    
-
-    // return response.choices[0].message.content;
 }

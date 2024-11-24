@@ -2,7 +2,13 @@
 
 import { UploadButton } from "../lib/uploadthing";
 
-export default function Upload({ setImgURL }: { setImgURL: (url: string) => void }) {
+export default function Upload({
+    setImgURL,
+    setUploadErr 
+}: {
+    setImgURL: (url: string) => void
+    setUploadErr: (error: string) => void
+}) {
     return (
         <UploadButton
             endpoint="imageUploader"
@@ -17,6 +23,7 @@ export default function Upload({ setImgURL }: { setImgURL: (url: string) => void
             }}
             onUploadError={(error: Error) => {
                 // Do something with the error.
+                setUploadErr(error.message);
                 alert(`ERROR! ${error.message}`);
             }}
             className="p-4 ut-button:bg-dhPurple ut-button:ut-readying:bg-dhOrange"
