@@ -32,7 +32,9 @@ export default function UploadAndResponse() {
                     }
                 } catch (error) {
                     setShowRes(false);
-                    setUploadErr(error.message)
+                    if(error instanceof Error){
+                        setUploadErr(error.message)
+                    }
                 }
                 
                 console.log(resObj)
