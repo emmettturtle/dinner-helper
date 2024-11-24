@@ -15,8 +15,8 @@ export default function Home() {
   // const [imgURL, setImgURL] = useState<string>('');
 
   return (
-    <div className="min-h-full">
-      <Disclosure as="nav" className="border-b border-gray-200 bg-white">
+    <div className="min-h-full h-screen bg-cover bg-center" style={{ backgroundImage: `url('../dinner-helper-backround.jpg')` }}>
+      <Disclosure as="nav" className="border-b border-gray-200 bg-dhYellow">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex justify-center items-center ">
             <h1 className='text-4xl p-3 text-black'>Dinner Helper</h1>

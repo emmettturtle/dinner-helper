@@ -7,15 +7,22 @@ import { fetchImgAnalysis } from "../lib/api";
 
 export default function UploadAndResponse() {
     const [imgURL, setImgURL] = useState<string>('');
+    const [resObj, setResObj] = useState<{ name: string; quantity: number }[]>([]);
+    const [loading, setLoading] = useState<boolean>(false);
 
     useEffect(() => {
         const fetchAnalysis = async () => {
             if (imgURL) {
+                setLoading(true);
                 // Function to be triggered after imgURL is updated
                 console.log("Image URL updated:", imgURL);
                 // You can add more logic here, such as making an API call or updating other state
                 const res = await fetchImgAnalysis(imgURL)
-                console.log(res)
+                console.log(resObj)
+                if (res && res.items) {
+                    setResObj(res.items);
+                }
+                setLoading(false);
             }
         }
 
@@ -26,6 +33,23 @@ export default function UploadAndResponse() {
 
     return (
         <div>
+            
+            {!loading && (
+                <div className="text-black">
+                    {resObj.length > 0 ? (
+                        <ul>
+                            {resObj.map((item, index) => (
+                                <li key={index}>
+                                    {item.name}: {item.quantity}
+                                </li>
+                            ))}
+                        </ul>
+                    ) : (
+                        <p>No items detected</p>
+                    )}
+                </div>
+            )}
+
             <Upload setImgURL={setImgURL}></Upload>
         </div>
     );

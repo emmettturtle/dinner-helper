@@ -1,8 +1,76 @@
+'use server';
+
 import OpenAI from "openai";
 
 const openai = new OpenAI({
-    apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
+    apiKey: process.env.OPENAI_API_KEY,
 });
+
+const prompt = `
+    Analyze a given image of food items to detect what food items are present and determine how many of each item are in the image.
+
+    If no food items are detected in the image, provide an appropriate error message. Respond using JSON data in all cases.
+
+    # Steps
+
+    1. **Image Analysis**: Examine the provided image for different food items.
+    2. **Object Identification**: Identify which types of food are present.
+    3. **Count Detection**: Determine the quantity of each identified food item.
+    4. **Construct Response**: Generate a JSON response containing the identified food items and their counts, or an error message if no items are detected.
+
+    # Output Format
+
+    - The response should always be in JSON format containing the following possible keys:
+    - \`"items"\`: A list of food items present in the image, each represented as an object with the item's name and quantity.
+        - Example:
+        \`\`\`json
+        {
+            "items": [
+            { "name": "apple", "quantity": 3 },
+            { "name": "banana", "quantity": 2 }
+            ]
+        }
+        \`\`\`
+    - If no items are found, provide an error message:
+        \`\`\`json
+        {
+        "error": "No food items detected"
+        }
+        \`\`\`
+
+    # Examples
+
+    ### Example 1 (Image has food items):
+
+    **Input**: (an image containing 3 apples and 2 bananas)
+
+    **Output**:
+    \`\`\`json
+    {
+    "items": [
+        { "name": "apple", "quantity": 3 },
+        { "name": "banana", "quantity": 2 }
+    ]
+    }
+    \`\`\`
+
+    ### Example 2 (Image has no food items):
+
+    **Input**: (an image with no identifiable food items)
+
+    **Output**:
+    \`\`\`json
+    {
+    "error": "No food items detected"
+    }
+    \`\`\`
+
+    # Notes
+
+    - Ensure the detected food items are commonly recognizable foods.
+    - In cases where a food item cannot be accurately identified, do not include it in the output rather than providing false information.
+    - All responses should be clear, accurate, and utilize standard JSON formatting without additional wrappers or explanations.
+`;
 
 export async function fetchImgAnalysis(imgUrl: string) {
 
@@ -12,34 +80,34 @@ export async function fetchImgAnalysis(imgUrl: string) {
             {
                 "role": "system",
                 "content": [
-                    {
-                        "type": "text",
-                        "text": "Analyze an image of food items to identify the types of food present and quantify the number of each item.\n\nThe model will be provided with an image containing different kinds of food items. You are expected to list the identifiable items present in the image and provide an approximate count for each type.\n\n# Steps\n\n1. **Object Detection**: \n   - Detect and identify all visible items in the image.\n   - Focus specifically on food items, ignoring any irrelevant objects that are not food.\n\n2. **Item Classification**:\n   - Classify each food item based on recognizable shapes, colors, and textures.\n   - If an item cannot be clearly identified, make a best guess and indicate uncertainty, if applicable.\n\n3. **Counting**:\n   - Count each type of identified food item.\n   - Group similar items and provide a sum for each category (e.g., \"apple: 3, banana: 5\").\n\n# Output Format\n\nUse JSON with the following structure:\n\n```json\n{\n  \"items\": [\n    {\n      \"name\": \"[item_name]\",\n      \"count\": [number_of_items]\n    },\n    {\n      \"name\": \"[another_item_name]\",\n      \"count\": [number_of_items]\n    }\n  ]\n}\n```\n- Items should be listed in alphabetical order.\n- If you are unsure about an item, describe it briefly and note `\"uncertain\": true`.\n\n# Examples\n\n### Example 1:\n**Input**: Image containing 3 apples, 5 bananas, and 1 loaf of bread.\n\n**Output**:\n```json\n{\n  \"items\": [\n    {\n      \"name\": \"apple\",\n      \"count\": 3\n    },\n    {\n      \"name\": \"banana\",\n      \"count\": 5\n    },\n    {\n      \"name\": \"bread\",\n      \"count\": 1\n    }\n  ]\n}\n```\n\n### Example 2:\n**Input**: Image containing 2 oranges, 1 bunch of grapes (estimated as 20 grapes), and 4 strawberries.\n\n**Output**:\n```json\n{\n  \"items\": [\n    {\n      \"name\": \"grape\",\n      \"count\": 20\n    },\n    {\n      \"name\": \"orange\",\n      \"count\": 2\n    },\n    {\n      \"name\": \"strawberry\",\n      \"count\": 4\n    }\n  ]\n}\n```\n\n# Notes\n\n- If items are partially obscured, make an approximate count and label it as `\"approximate\": true`.\n- If different counts of recognizable variants (e.g., green vs. red apples) are needed, list them as separate categories."
-                    }
+                {
+                    "type": "text",
+                    "text": prompt
+                }
                 ]
             },
             {
                 "role": "user",
                 "content": [
-                    {
-                        "type": "text",
-                        "text": "What are the items in this food image"
-                    },
-                    {
-                        "type": "image_url",
-                        "image_url": {
-                            "url": imgUrl
-                        }
+                {
+                    "type": "text",
+                    "text": "What food items are in this image?"
+                },
+                {
+                    "type": "image_url",
+                    "image_url": {
+                    "url": imgUrl
                     }
+                }
                 ]
             }
             // {
             //     "role": "assistant",
             //     "content": [
-            //         {
-            //             "type": "text",
-            //             "text": "The image shows various food items in a refrigerator. Here's a list of identifiable items:\n\n```json\n{\n  \"items\": [\n    {\n      \"name\": \"apple\",\n      \"count\": 3\n    },\n    {\n      \"name\": \"bell pepper\",\n      \"count\": 3\n    },\n    {\n      \"name\": \"bottle\",\n      \"count\": 5\n    },\n    {\n      \"name\": \"carrot\",\n      \"count\": 12\n    },\n    {\n      \"name\": \"donut\",\n      \"count\": 2\n    },\n    {\n      \"name\": \"egg carton\",\n      \"count\": 1\n    },\n    {\n      \"name\": \"grape\",\n      \"count\": 1\n    },\n    {\n      \"name\": \"lettuce\",\n      \"count\": 1\n    },\n    {\n      \"name\": \"orange\",\n      \"count\": 3\n    },\n    {\n      \"name\": \"pickle jar\",\n      \"count\": 1\n    },\n    {\n      \"name\": \"tomato\",\n      \"count\": 6\n    }\n  ]\n}\n```"
-            //         }
+            //     {
+            //         "type": "text",
+            //         "text": "```json\n{\n  \"items\": [\n    { \"name\": \"milk\", \"quantity\": 1 },\n    { \"name\": \"orange juice\", \"quantity\": 1 },\n    { \"name\": \"vegetables\", \"quantity\": 1 },\n    { \"name\": \"grapes\", \"quantity\": 1 },\n    { \"name\": \"oranges\", \"quantity\": 3 },\n    { \"name\": \"apples\", \"quantity\": 3 },\n    { \"name\": \"condiments\", \"quantity\": 5 },\n    { \"name\": \"bottled drinks\", \"quantity\": 4 }\n  ]\n}\n```"
+            //     }
             //     ]
             // }
         ],
@@ -53,5 +121,27 @@ export async function fetchImgAnalysis(imgUrl: string) {
         presence_penalty: 0
     });
 
-    return response;
+    const content = response.choices[0].message?.content;
+
+    // console.log(content)
+
+    if (content) {
+        try {
+            const cleanedContent = content.replace(/```json|```/g, '').trim();
+            // console.log(cleanedContent)
+            const jsonResponse = JSON.parse(cleanedContent);
+            console.log(jsonResponse);
+            return jsonResponse;
+        } catch (error) {
+            console.error("Failed to parse JSON response:", error);
+            throw new Error("Failed to parse JSON response");
+        }
+    } else {
+        throw new Error("No content in response");
+    }
+    // console.log(JSON.parse(response.choices[0].message.content))
+    // const jsonResponse = response.choices[0].message.content
+    
+
+    // return response.choices[0].message.content;
 }
