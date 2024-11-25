@@ -33,7 +33,8 @@ export default function UploadAndResponse() {
                 } catch (error) {
                     setShowRes(false);
                     if(error instanceof Error){
-                        setUploadErr(error.message)
+                        const errMsg = error.message
+                        setUploadErr(errMsg)
                     }
                 }
                 
