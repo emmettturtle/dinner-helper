@@ -8,13 +8,7 @@ import UploadAndResponse from './ui/upload-response'
 import { lilitaOne, robotoSlab } from '@/app/ui/fonts';
 
 
-function classNames(...classes: (string | false | null | undefined)[]): string {
-  return classes.filter(Boolean).join(' ');
-}
-
 export default function Home() {
-  // const [imgURL, setImgURL] = useState<string>('');
-
   return (
     <div className="min-h-full h-screen bg-cover bg-center" style={{ backgroundImage: `url('../dinner-helper-backround.jpg')` }}>
       <Disclosure as="nav" className=" border-2 border-dhOrange bg-dhYellow">
@@ -36,7 +30,7 @@ export default function Home() {
           <div className={
             `${robotoSlab.className} mx-auto max-w-7xl px-20 sm:px-6 lg:px-8 text-dhPurple bg-dhWhite rounded-lg`
           }>
-            {/* upload button */}
+            {/* upload button & Response */}
             <div className='flex justify-evenly w-full'>
               <UploadAndResponse></UploadAndResponse>
             </div>

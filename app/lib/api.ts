@@ -116,6 +116,7 @@ export async function fetchImgAnalysis(imgUrl: string) {
 
     // console.log(content)
 
+    // Parsing Response to give us a raw JSON object
     if (content) {
         try {
             const cleanedContent = content.replace(/```json|```/g, '').trim();

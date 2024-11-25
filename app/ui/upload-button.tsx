@@ -1,6 +1,7 @@
 "use client";
 
 import { UploadButton } from "../lib/uploadthing";
+//upload button imported from uploadThing API
 
 export default function Upload({
     setImgURL,

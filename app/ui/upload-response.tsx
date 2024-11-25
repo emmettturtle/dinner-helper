@@ -14,16 +14,18 @@ export default function UploadAndResponse() {
     const [showRes, setShowRes] = useState<boolean>(false);
     const [uploadErr, setUploadErr] = useState<string>(''); 
 
+    // Function to be triggered after imgURL is updated
     useEffect(() => {
         const fetchAnalysis = async () => {
             if (imgURL && !uploadErr) {
+                //resetting state
                 setShowRes(true);
                 setLoading(true);
                 setResObj([]); // Reset resObj to an empty array
                 setError(''); // Reset error state
-                // Function to be triggered after imgURL is updated
                 console.log("Image URL updated:", imgURL);
                 try {
+                    //OpenAI call
                     const res = await fetchImgAnalysis(imgURL)
                     if (res && res.items) {
                         setResObj(res.items);
@@ -33,8 +35,7 @@ export default function UploadAndResponse() {
                 } catch (error) {
                     setShowRes(false);
                     if(error instanceof Error){
-                        const errMsg = error.message
-                        setUploadErr(errMsg)
+                        setUploadErr("You uploaded an unsupported file. Please make sure your image has of one the following formats: [png, jpeg].") 
                     }
                 }
                 
